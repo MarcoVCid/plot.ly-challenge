@@ -20,6 +20,9 @@ d3.json("data/samples.json").then((importedData) => {
         let subjectFreq = data.samples[index].sample_values;
         let otuLabels = data.samples[index].otu_labels;
 
+        // variable for the bonus assignment
+        let washFreq = data.metadata[+index].wfreq;
+
 
         let demoEntries = Object.entries(data.metadata[index])
         let demoData = d3.select('#sample-metadata');
@@ -84,6 +87,47 @@ d3.json("data/samples.json").then((importedData) => {
         }
 
         Plotly.newPlot('bubble', bubbleData, layout)
+
+        // Gauge plot for the bonus assignment :)
+
+        let trace3 = {
+            domain: {x: [0,1], y: [0,1]},
+            type: 'indicator',
+            mode: 'gauge+number',
+            value: washFreq,
+            title: {text: 'Belly Button Washes per week'},
+            gauge: {
+                axis: {range: [0,9], tickwidth: 0.5, tickcolor: 'black'},
+                bar: {color: '#669999'},
+                bgcolor: 'white',
+                borderwidth: 2,
+                bordercolor: 'transparent',
+                steps: [
+                    {range: [0,1], color: '#fff'},
+                    { range: [1, 2], color: "#e6fff5" },
+                    { range: [2, 3], color: "ccffeb" },
+                    { range: [3, 4], color: "b3ffe0" },
+                    { range: [4, 5], color: "#99ffd6" },
+                    { range: [5, 6], color: "#80ffcc" },
+                    { range: [6, 7], color: "#66ffc2" },
+                    { range: [7, 8], color: "#4dffb8" },
+                    { range: [8, 9], color: "#33ffad" }
+                ]
+            }
+        }
+
+        let gaugeData = [trace3];
+
+        layout = {
+            width: 600,
+            height: 500,
+            margin: {
+                t: 0,
+                b: 0
+            }
+        };
+
+        Plotly.newPlot('gauge', gaugeData, layout)
     };
 
     d3.selectAll('#selDataset').on('change', refreshData)
