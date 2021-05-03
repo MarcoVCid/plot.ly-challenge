@@ -61,5 +61,43 @@ d3.json("data/samples.json").then((importedData) => {
         };
 
         Plotly.newPlot("bar", barData, layout);
+
+        let trace2 = {
+            x: subjectOTU,
+            y: subjectFreq,
+            text: otuLabels,
+            mode: 'markers',
+            marker: {
+                color: subjectOTU,
+                opacity: [1, 0.8, 0.6, 0.4],
+                size: subjectFreq
+            }
+        };
+
+        let bubbleData = [trace2];
+
+        layout = {
+            title: 'OTU Frequency',
+            showlegend: false,
+            height: 600,
+            width: 930
+        }
+
+        Plotly.newPlot('bubble', bubbleData, layout)
+    };
+
+    d3.selectAll('#selDataset').on('change', refreshData)
+
+    function refreshData() {
+        let dropdownMenu = d3.select('#selDataset')
+        let patientID = dropdownMenu.property('value')
+
+        console.log(patientID);
+
+        for (i = 0; i < data.names.length; ++i) {
+            if (patientID === data.names[i]) {
+                updatePlot(i)
+            }
+        }
     };
 });
